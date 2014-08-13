@@ -25,8 +25,11 @@
             return this.each(function () {
                 el = jQuery(this);
                 combobox = el.data(COMBOBOX_DATA_KEY);
+                for (var i = array.length - 1; i--;)
+                    if (array[i] === combobox) array.splice(i, 1);
                 combobox.destroy();
                 el.removeData(COMBOBOX_DATA_KEY);
+
             });
         }
 
@@ -54,11 +57,11 @@
         var inputHeight = this.textInputElement.outerHeight();
         var buttonLeftPosition = this.textInputElement.outerWidth() + 0;
         this.showSelectorButton = jQuery(
-            '<a href="#" class="combobox_button" ' +
+            '<a href="#" class="combobox_button combobox_glow" ' +
             'style="position:absolute; height:' + inputHeight + 'px; width:' +
-            inputHeight + 'px; top:0; right:0;"><div class="combobox_arrow"></div></a>'
+            inputHeight + 'px; top:0; left:' + buttonLeftPosition + 'px;"><div class="combobox_arrow"></div></a>'
         );
-        this.textInputElement.css('margin', '0 ' + this.showSelectorButton.outerWidth()+'px 0 0');
+        this.textInputElement.css('margin', '0 ' + this.showSelectorButton.outerWidth() + 'px 0 0').css('border-right-width', '0').css('border-radius', '4px 0px 0px 4px');
         this.showSelectorButton.insertAfter(this.textInputElement);
         var thisSelector = this.selector;
         var thisCombobox = this;
@@ -153,11 +156,10 @@ var ComboboxSelector = function (combobox) {
     this.selectedIndex = -1;
     this.allSelectOptions = [];
     var selectorTop = combobox.textInputElement.outerHeight();
-    var selectorWidth = combobox.textInputElement.outerWidth();
+    var selectorWidth = combobox.textInputElement.outerWidth() + 34;
     this.selectorElement = jQuery(
         '<div class="combobox_selector" ' +
-        'style="display:none; width:' + selectorWidth +
-        'px; top: ' + selectorTop + 'px;"></div>'
+        'style="display:none; top: ' + selectorTop + 'px; width: ' + selectorWidth + 'px;"></div>'
     ).insertAfter(this.combobox.textInputElement);
     var thisSelector = this;
     this.keypressHandler = function (e) {
